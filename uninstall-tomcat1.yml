@@ -1,0 +1,27 @@
+---
+- hosts: webservers
+  tasks:
+    - name: Make sure that we can connect to the machine
+      ping:
+
+    - name: Stop Tomcat
+      shell: ./shutdown.sh
+      args:
+       chdir: /opt/apache-tomcat-8.5.49/bin/
+      become: true
+      become_user: tomcat
+
+    - name: Remove Tomcat
+      file:
+        path: /opt/apache-tomcat-8.5.49
+        state: absent
+
+    - name: remove user "tomcat"
+      user:
+        name: tomcat
+        state: absent
+
+    - name: remove group "tomcat"
+      group:
+        name: tomcat
+        state: absent
